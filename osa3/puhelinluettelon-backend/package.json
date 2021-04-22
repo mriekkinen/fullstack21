@@ -6,11 +6,16 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:ui": "rm -rf ./build && cd ../../osa2/puhelinluettelo && npm run build --prod && cp -r build ../../osa3/puhelinluettelon-backend/",
+    "deploy": "heroku container:login && heroku container:push web -a fs-puhelinluettelo-17400 && heroku container:release web -a fs-puhelinluettelo-17400",
+    "deploy:full": "npm run build:ui && npm run deploy",
+    "logs:prod": "heroku logs --tail -a fs-puhelinluettelo-17400"
   },
   "author": "mriekkin",
   "license": "MIT",
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.17.1",
     "morgan": "^1.10.0"
   },

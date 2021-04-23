@@ -5,3 +5,13 @@ Content-Type: application/json
   "name": "Edsger W. Dijkstra",
   "number": "0400-987654"
 }
+
+###
+
+POST https://fs-puhelinluettelo-17400.herokuapp.com/api/persons
+Content-Type: application/json
+
+{
+  "name": "Edsger W. Dijkstra",
+  "number": "0400-987654"
+}

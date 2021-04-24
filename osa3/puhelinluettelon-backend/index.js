@@ -1,7 +1,9 @@
+require('dotenv').config()
 const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
 const app = express()
+const Person = require('./models/person')
 
 morgan.token('body', (req, res) => JSON.stringify(req.body))
 
@@ -10,6 +12,7 @@ app.use(cors())
 app.use(express.json())
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
+// TODO: This will be removed!
 let persons = [
   {
     "name": "Arto Hellas",
@@ -45,7 +48,9 @@ app.get('/info', (req, res) => {
 })
 
 app.get('/api/persons', (req, res) => {
-  res.json(persons)
+  Person.find({}).then(persons => {
+    res.json(persons)
+  })
 })
 
 app.get('/api/persons/:id', (req, res) => {
@@ -61,7 +66,6 @@ app.get('/api/persons/:id', (req, res) => {
 
 app.post('/api/persons', (req, res) => {
   const person = req.body
-  const generateId = () => Math.floor(Math.random() * 1000000)
 
   if (!person.name || !person.number) {
     return res.status(400).json({
@@ -69,20 +73,14 @@ app.post('/api/persons', (req, res) => {
     })
   }
 
-  if (persons.some(p => p.name === person.name)) {
-    return res.status(400).json({
-      error: 'name must be unique'
-    })
-  }
-
-  const newPerson = {
+  const newPerson = new Person({
     name: person.name,
-    number: person.number,
-    id: generateId()
-  }
+    number: person.number
+  })
 
-  persons.push(newPerson)
-  res.json(newPerson)
+  newPerson.save().then(savedPerson => {
+    res.json(savedPerson)
+  })
 })
 
 app.delete('/api/persons/:id', (req, res) => {
@@ -92,7 +90,7 @@ app.delete('/api/persons/:id', (req, res) => {
   res.status(204).end()
 })
 
-const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })

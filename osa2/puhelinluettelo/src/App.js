@@ -113,6 +113,9 @@ const App = () => {
         setNewNumber('')
         showMessage(`Added ${returnedPerson.name}`)
       })
+      .catch(error => {
+        showMessage(error.response.data.error, 'failure')
+      })
   }
 
   const updatePerson = (id, changedPerson) => {

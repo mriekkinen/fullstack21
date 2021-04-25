@@ -7,8 +7,7 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm install --production
 
-COPY index.js ./
-COPY build ./build/
+COPY . .
 
 RUN adduser -D docker
 USER docker

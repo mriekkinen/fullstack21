@@ -5,7 +5,7 @@ const cors = require('cors')
 const app = express()
 const Person = require('./models/person')
 
-morgan.token('body', (req, res) => JSON.stringify(req.body))
+morgan.token('body', req => JSON.stringify(req.body))
 
 app.use(express.static('build'))
 app.use(cors())
@@ -84,12 +84,9 @@ app.put('/api/persons/:id', (req, res, next) => {
     .catch(error => next(error))
 })
 
-
 app.delete('/api/persons/:id', (req, res, next) => {
   Person.findByIdAndRemove(req.params.id)
-    .then(result => {
-      res.status(204).end()
-    })
+    .then(() => res.status(204).end())
     .catch(error => next(error))
 })
 

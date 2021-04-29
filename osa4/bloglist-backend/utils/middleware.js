@@ -11,11 +11,15 @@ const requestLogger = (req, res, next) => {
 }
 */
 
-morgan.token('body', req => JSON.stringify(req.body))
+let requestLogger = (req, res, next) => next()
 
-const requestLogger = morgan(
-  ':method :url :status :response-time ms - :res[content-length] :body'
-)
+if (process.env.NODE_ENV !== 'test') {
+  morgan.token('body', req => JSON.stringify(req.body))
+
+  requestLogger = morgan(
+    ':method :url :status :response-time ms - :res[content-length] :body'
+  )
+}
 
 const unknownEndpoint = (req, res) => {
   res.status(404).send({ error: 'unknown endpoint' })

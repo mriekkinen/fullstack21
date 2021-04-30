@@ -2,15 +2,13 @@ const mongoose = require('mongoose')
 const supertest = require('supertest')
 const app = require('../app')
 const Blog = require('../models/blog')
-const { initialBlogs, blogsInDb } = require('./test_helper')
+const { initialBlogs, nonExistingId, blogsInDb } = require('./test_helper')
 
 const api = supertest(app)
 
 beforeEach(async () => {
   await Blog.deleteMany({})
-  for (blog of initialBlogs) {
-    await (new Blog(blog)).save()
-  }
+  await Blog.insertMany(initialBlogs)
 })
 
 describe('get all blogs', () => {
@@ -119,6 +117,117 @@ describe('add new blog', () => {
     const blogsAtEnd = await blogsInDb()
 
     expect(blogsAtEnd).toHaveLength(initialBlogs.length)
+  })
+})
+
+describe('remove blog', () => {
+  test('can remove with valid id', async () => {
+    const blogsAtStart = await blogsInDb()
+    const blogToDelete = blogsAtStart[0]
+    await api
+      .delete(`/api/blogs/${blogToDelete.id}`)
+      .expect(204)
+
+      const blogsAtEnd = await blogsInDb()
+      const titles = blogsAtEnd.map(blog => blog.title)
+
+      expect(blogsAtEnd).toHaveLength(initialBlogs.length - 1)
+      expect(titles).not.toContain(blogToDelete.title)
+  })
+
+  test('if called with malformatted id, returns 400 bad request', async () => {
+    await api
+      .delete('/api/blogs/123')
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+
+    const blogsAtEnd = await blogsInDb()
+
+    expect(blogsAtEnd).toHaveLength(initialBlogs.length)
+  })
+})
+
+describe('update blog', () => {
+  test('can update title of existing blog', async () => {
+    const blogsAtStart = await blogsInDb()
+    const blogToUpdate = blogsAtStart[0]
+    const updatedBlog = {
+      ...blogToUpdate,
+      title: 'Updated Blog'
+    }
+
+    await api
+      .put(`/api/blogs/${blogToUpdate.id}`)
+      .send(updatedBlog)
+      .expect(200)
+
+      const blogsAtEnd = await blogsInDb()
+
+      expect(blogsAtEnd).toHaveLength(initialBlogs.length)
+      expect(blogsAtEnd).toContainEqual(updatedBlog)
+  })
+
+  test('can update likes of existing blog', async () => {
+    const blogsAtStart = await blogsInDb()
+    const blogToUpdate = blogsAtStart[0]
+    const updatedBlog = {
+      ...blogToUpdate,
+      likes: 100
+    }
+
+    await api
+      .put(`/api/blogs/${blogToUpdate.id}`)
+      .send(updatedBlog)
+      .expect(200)
+
+      const blogsAtEnd = await blogsInDb()
+
+      expect(blogsAtEnd).toHaveLength(initialBlogs.length)
+      expect(blogsAtEnd).toContainEqual(updatedBlog)
+  })
+
+  test('if called with valid but non-existing id, returns 404 not found', async () => {
+    const blogsAtStart = await blogsInDb()
+    const nonExistingBlog = {
+      id: await nonExistingId(),
+      title: 'Blog which doesn\'t exist on the server (but has a valid id)',
+      author: 'Jane Doe',
+      url: 'https://janedoe.example.com',
+      likes: 1
+    }
+
+    await api
+      .put(`/api/blogs/${nonExistingBlog.id}`)
+      .send(nonExistingBlog)
+      .expect(404)
+
+    const blogsAtEnd = await blogsInDb()
+    const titles = blogsAtEnd.map(blog => blog.title)
+
+    expect(blogsAtEnd).toHaveLength(initialBlogs.length)
+    expect(titles).not.toContain(nonExistingBlog.title)
+  })
+
+  test('if called with malformatted id, returns 400 bad request', async () => {
+    const nonExistingBlog = {
+      id: '123',
+      title: 'Blog which doesn\'t exist on the server (and has a malformatted id)',
+      author: 'John Doe',
+      url: 'https://johndoe.example.com',
+      likes: 1
+    }
+
+    await api
+      .put(`/api/blogs/${nonExistingBlog.id}`)
+      .send(nonExistingBlog)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+
+    const blogsAtEnd = await blogsInDb()
+    const titles = blogsAtEnd.map(blog => blog.title)
+
+    expect(blogsAtEnd).toHaveLength(initialBlogs.length)
+    expect(titles).not.toContain(nonExistingBlog.title)
   })
 })
 

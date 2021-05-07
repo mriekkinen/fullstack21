@@ -15,3 +15,5 @@ GET http://localhost:3001/api/blogs
 ###
 
 DELETE http://localhost:3001/api/blogs/1
+Content-Type: application/json
+Authorization: bearer eyJ...

@@ -1,16 +1,31 @@
 const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
+const { userExtractor } = require('../utils/middleware')
 
 blogsRouter.get('/', async (request, response) => {
-  const blogs = await Blog.find({})
+  const blogs = await Blog
+    .find({})
+    .populate('user', { username: 1, name: 1 })
   response.json(blogs)
 })
 
-blogsRouter.post('/', async (request, response) => {
+blogsRouter.post('/', userExtractor, async (request, response) => {
+  const user = request.user
+
+  if (!user) {
+    return response.status(401).json({
+      error: 'token missing or invalid'
+    })
+  }
+
   const blog = new Blog(request.body)
 
-  const result = await blog.save()
-  response.status(201).json(result)
+  blog.user = user._id
+  user.blogs.push(blog._id)
+  await blog.save()
+  await user.save()
+
+  response.status(201).json(blog)
 })
 
 blogsRouter.put('/:id', async (request, response) => {
@@ -27,8 +42,28 @@ blogsRouter.put('/:id', async (request, response) => {
   }
 })
 
-blogsRouter.delete('/:id', async (request, response) => {
-  await Blog.findByIdAndDelete(request.params.id)
+blogsRouter.delete('/:id', userExtractor, async (request, response) => {
+  const user = request.user
+
+  if (!user) {
+    return response.status(401).json({
+      error: 'token missing or invalid'
+    })
+  }
+
+  const blog = await Blog.findById(request.params.id)
+
+  if (!blog) {
+    return response.status(404).end()
+  }
+
+  if (blog.user.toString() !== user._id.toString()) {
+    return response.status(403).json({
+      error: 'this blog doesn\'t belong to you'
+    })
+  }
+
+  await blog.delete()
   response.status(204).end()
 })
 

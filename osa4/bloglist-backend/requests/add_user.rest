@@ -1,0 +1,62 @@
+POST http://localhost:3001/api/users
+Content-Type: application/json
+
+{
+  "username": "johnd",
+  "name": "John Doe",
+  "password": "seeeekret"
+}
+
+###
+
+POST http://localhost:3001/api/users
+Content-Type: application/json
+
+{
+  "username": "hellas",
+  "name": "Arto Hellas",
+  "password": "seeeekret"
+}
+
+###
+
+POST http://localhost:3001/api/users
+Content-Type: application/json
+
+{
+  "username": "mluukkai",
+  "name": "Matti Luukkainen",
+  "password": "seeeekret"
+}
+
+###
+
+POST http://localhost:3001/api/users
+Content-Type: application/json
+
+{
+  "name": "Missing Username",
+  "password": "qwerty"
+}
+
+###
+
+POST http://localhost:3001/api/users
+Content-Type: application/json
+
+{
+  "username": "me",
+  "name": "Short Username",
+  "password": "qwerty"
+}
+
+###
+
+POST http://localhost:3001/api/users
+Content-Type: application/json
+
+{
+  "username": "mikko",
+  "name": "Short Password",
+  "password": "qw"
+}

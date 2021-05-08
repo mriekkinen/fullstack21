@@ -29,6 +29,16 @@ div.notification.success {
   margin: 5px 0;
 }
 
-.whoami button {
+.whoami button, .blog button {
   margin: 0 5px;
+}
+
+div.blog {
+  padding: 5px 2px;
+  margin-bottom: 5px;
+  border: 1px solid black;
+}
+
+div.blog:first-child {
+  margin-top: 5px;
 }

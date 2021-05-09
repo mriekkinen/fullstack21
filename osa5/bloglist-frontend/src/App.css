@@ -33,8 +33,12 @@ div.notification.success {
   margin: 0 5px;
 }
 
+.blog .remove-blog-btn {
+  margin: 1px 0 0 0;
+}
+
 div.blog {
-  padding: 5px 2px;
+  padding: 5px 5px;
   margin-bottom: 5px;
   border: 1px solid black;
 }

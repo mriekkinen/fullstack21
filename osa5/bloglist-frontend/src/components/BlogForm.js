@@ -27,7 +27,7 @@ const BlogForm = ({ createBlog }) => {
               name='title'
               value={title}
               onChange={e => setTitle(e.target.value)}
-            />            
+            />
           </label>
         </div>
         <div>
@@ -38,7 +38,7 @@ const BlogForm = ({ createBlog }) => {
               name='author'
               value={author}
               onChange={e => setAuthor(e.target.value)}
-            />            
+            />
           </label>
         </div>
         <div>

@@ -16,9 +16,11 @@ const App = () => {
 
   const blogFormRef = useRef()
 
+  const compare = (a, b) => b.likes - a.likes
+
   useEffect(() => {
     blogService.getAll().then(blogs =>
-      setBlogs(blogs)
+      setBlogs(blogs.sort(compare))
     )  
   }, [])
 
@@ -57,8 +59,8 @@ const App = () => {
   const addBlog = async (newBlog) => {
     try {
       const savedBlog = await blogService.create(newBlog)
-      setBlogs(blogs.concat(savedBlog))
 
+      setBlogs(blogs.concat(savedBlog).sort(compare))
       blogFormRef.current.setVisible(false)
       showNotification(
         'success',
@@ -68,6 +70,42 @@ const App = () => {
       showNotification(
         'error',
         exception.response.data.error)
+    }
+  }
+
+  const updateBlog = async (id, newBlog) => {
+    try {
+      const returnedBlog = await blogService.update(id, newBlog)
+
+      const updatedBlogs = blogs.map(b => b.id !== id ? b : returnedBlog)
+      setBlogs(updatedBlogs.sort(compare))
+      showNotification(
+        'success',
+        `liked blog ${returnedBlog.title} by ${returnedBlog.author}`
+      )
+    } catch (exception) {
+      showNotification(
+        'error',
+        `update failed: ${exception.response.data.error}`
+      )
+    }
+  }
+
+  const removeBlog = async (id, blog) => {
+    try {
+      await blogService.remove(id)
+
+      const filteredBlogs = blogs.filter(b => b.id !== id)
+      setBlogs(filteredBlogs)
+      showNotification(
+        'success',
+        `removed blog ${blog.title} by ${blog.author}`
+      )
+    } catch (exception) {
+      showNotification(
+        'error',
+        `removal failed: ${exception.response.data.error}`
+      )
     }
   }
 
@@ -85,7 +123,15 @@ const App = () => {
       </Togglable>
       <div>
         {blogs.map(blog =>
-          <Blog key={blog.id} blog={blog} />
+          <Blog
+            key={blog.id}
+            blog={blog}
+            update={updateBlog}
+            remove={
+              blog.user.username === user.username
+              ? removeBlog
+              : null
+            } />
         )}
       </div>
     </div>

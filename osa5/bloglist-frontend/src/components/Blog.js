@@ -1,19 +1,37 @@
 import React, { useState } from 'react'
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, update, remove }) => {
   const [ isExpanded, setExpanded ] = useState(false)
 
+  const like = () => {
+    const newBlog = {
+      user: blog.user.id,
+      likes: blog.likes + 1,
+      author: blog.author,
+      title: blog.title,
+      url: blog.url
+    }
+
+    update(blog.id, newBlog)
+  }
+
+  const confirmRemove = () => {
+    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
+      remove(blog.id, blog)
+    }
+  }
+
   return (
-    <>
+    <div className='blog'>
       {!isExpanded
-        ? <div className='blog'>
+        ? <>
             {blog.title} {blog.author}
             <button
               onClick={() => setExpanded(true)}>
                 view
             </button>
-          </div>
-        : <div className='blog'>
+          </>
+        : <>
             <div>
               {blog.title} {blog.author}
               <button
@@ -26,14 +44,25 @@ const Blog = ({ blog }) => {
             </div>
             <div>
               likes {blog.likes}
-              <button>like</button>
+              <button onClick={() => like()}>
+                like
+              </button>
             </div>
             <div>
               {blog.user.name}
             </div>
-        </div>
+            {remove && (
+              <div>
+                <button
+                  className='remove-blog-btn'
+                  onClick={() => confirmRemove()}>
+                    remove
+                </button>
+              </div>
+            )}
+          </>
       }
-    </>
+    </div>
   )
 }
 

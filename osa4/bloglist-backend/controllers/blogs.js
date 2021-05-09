@@ -1,5 +1,7 @@
 const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
+const { populate } = require('../models/user')
+const User = require('../models/user')
 const { userExtractor } = require('../utils/middleware')
 
 blogsRouter.get('/', async (request, response) => {
@@ -25,7 +27,13 @@ blogsRouter.post('/', userExtractor, async (request, response) => {
   await blog.save()
   await user.save()
 
-  response.status(201).json(blog)
+  // Populate the blog's user field
+  const populatedBlog = await Blog.populate(blog, {
+    path: 'user',
+    select: { username: 1, name: 1 }
+  })
+
+  response.status(201).json(populatedBlog)
 })
 
 blogsRouter.put('/:id', async (request, response) => {
@@ -34,6 +42,7 @@ blogsRouter.put('/:id', async (request, response) => {
     request.body,
     { new: true }
   )
+  .populate('user', { username: 1, name: 1 })
 
   if (updatedBlog) {
     response.json(updatedBlog)

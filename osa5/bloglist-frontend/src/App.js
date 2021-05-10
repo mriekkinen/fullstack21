@@ -21,7 +21,7 @@ const App = () => {
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs(blogs.sort(compare))
-    )  
+    )
   }, [])
 
   useEffect(() => {
@@ -118,8 +118,8 @@ const App = () => {
       <Togglable
         buttonLabel='create new blog'
         ref={blogFormRef}>
-          <BlogForm
-            createBlog={addBlog} />
+        <BlogForm
+          createBlog={addBlog} />
       </Togglable>
       <div>
         {blogs.map(blog =>
@@ -129,8 +129,8 @@ const App = () => {
             update={updateBlog}
             remove={
               blog.user.username === user.username
-              ? removeBlog
-              : null
+                ? removeBlog
+                : null
             } />
         )}
       </div>

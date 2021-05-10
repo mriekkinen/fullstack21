@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 const WhoAmI = ({ name, logout }) => (
   <p className='whoami'>
@@ -8,5 +9,10 @@ const WhoAmI = ({ name, logout }) => (
     </button>
   </p>
 )
+
+WhoAmI.propTypes = {
+  name: PropTypes.string.isRequired,
+  logout: PropTypes.func.isRequired
+}
 
 export default WhoAmI

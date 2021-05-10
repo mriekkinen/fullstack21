@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import PropTypes from 'prop-types'
 
 const Blog = ({ blog, update, remove }) => {
   const [ isExpanded, setExpanded ] = useState(false)
@@ -64,6 +65,12 @@ const Blog = ({ blog, update, remove }) => {
       }
     </div>
   )
+}
+
+Blog.propTypes = {
+  blog: PropTypes.object.isRequired,
+  update: PropTypes.func.isRequired,
+  remove: PropTypes.func
 }
 
 export default Blog

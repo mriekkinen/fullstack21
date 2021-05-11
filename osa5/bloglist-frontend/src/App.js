@@ -121,14 +121,14 @@ const App = () => {
         <BlogForm
           createBlog={addBlog} />
       </Togglable>
-      <div>
+      <div id='blogs'>
         {blogs.map(blog =>
           <Blog
             key={blog.id}
             blog={blog}
             update={updateBlog}
             remove={
-              blog.user.username === user.username
+              (blog.user && blog.user.username === user.username)
                 ? removeBlog
                 : null
             } />

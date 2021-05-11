@@ -5,7 +5,7 @@ const WhoAmI = ({ name, logout }) => (
   <p className='whoami'>
     {name} logged in
     <button onClick={() => logout()}>
-      logout
+      log out
     </button>
   </p>
 )

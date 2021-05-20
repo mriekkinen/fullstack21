@@ -28,7 +28,8 @@ const AnecdoteList = ({ anecdotes }) => (
           <Link to={`/anecdotes/${anecdote.id}`}>
             {anecdote.content}
           </Link>
-        </li>)}
+        </li>
+      )}
     </ul>
   </div>
 )

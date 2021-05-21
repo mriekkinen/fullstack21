@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
+import { useDispatch } from 'react-redux'
 import './App.css'
 import Blog from './components/Blog'
 import BlogForm from './components/BlogForm'
@@ -8,11 +9,13 @@ import Togglable from './components/Togglable'
 import WhoAmI from './components/WhoAmI'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import { setNotification } from './reducers/notificationReducer'
 
 const App = () => {
   const [ blogs, setBlogs ] = useState([])
   const [ user, setUser ] = useState(null)
-  const [ notification, setNotification ] = useState({})
+
+  const dispatch = useDispatch()
 
   const blogFormRef = useRef()
 
@@ -33,10 +36,13 @@ const App = () => {
     setUser(user)
   }, [])
 
+  /*
   const showNotification = (type, message) => {
-    setNotification({ type, message })
-    setTimeout(() => setNotification({}), 5000)
+    //setNotification({ type, message })
+    //setTimeout(() => setNotification({}), 5000)
+    dispatch(setNotification(type, message))
   }
+  */
 
   const login = async (credentials) => {
     try {
@@ -46,7 +52,7 @@ const App = () => {
       blogService.setToken(user.token)
       setUser(user)
     } catch (exception) {
-      showNotification('error', 'wrong username or password')
+      dispatch(setNotification('error', 'wrong username or password'))
     }
   }
 
@@ -62,14 +68,15 @@ const App = () => {
 
       setBlogs(blogs.concat(savedBlog).sort(compare))
       blogFormRef.current.setVisible(false)
-      showNotification(
+      dispatch(setNotification(
         'success',
         `a new blog ${savedBlog.title} by ${savedBlog.author} added`
-      )
+      ))
     } catch (exception) {
-      showNotification(
+      dispatch(setNotification(
         'error',
-        exception.response.data.error)
+        exception.response.data.error
+      ))
     }
   }
 
@@ -79,15 +86,15 @@ const App = () => {
 
       const updatedBlogs = blogs.map(b => b.id !== id ? b : returnedBlog)
       setBlogs(updatedBlogs.sort(compare))
-      showNotification(
+      dispatch(setNotification(
         'success',
         `liked blog ${returnedBlog.title} by ${returnedBlog.author}`
-      )
+      ))
     } catch (exception) {
-      showNotification(
+      dispatch(setNotification(
         'error',
         `update failed: ${exception.response.data.error}`
-      )
+      ))
     }
   }
 
@@ -97,15 +104,15 @@ const App = () => {
 
       const filteredBlogs = blogs.filter(b => b.id !== id)
       setBlogs(filteredBlogs)
-      showNotification(
+      dispatch(setNotification(
         'success',
         `removed blog ${blog.title} by ${blog.author}`
-      )
+      ))
     } catch (exception) {
-      showNotification(
+      dispatch(setNotification(
         'error',
         `removal failed: ${exception.response.data.error}`
-      )
+      ))
     }
   }
 
@@ -139,9 +146,7 @@ const App = () => {
 
   return (
     <div>
-      <Notification
-        type={notification.type}
-        message={notification.message} />
+      <Notification />
       {user === null
         ? <LoginForm login={login} />
         : mainContent()

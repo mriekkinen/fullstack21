@@ -1,8 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { useSelector } from 'react-redux'
 
-const Notification = ({ type, message }) => {
-  if (!(type && message)) return null
+const Notification = () => {
+  const { type, message } = useSelector(state => state.notification)
+
+  if (!(type && message)) {
+    return null
+  }
+
   return (
     <div className={`notification ${type}`}>
       {message}

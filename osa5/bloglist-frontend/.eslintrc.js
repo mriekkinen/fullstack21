@@ -23,7 +23,10 @@ module.exports = {
       "indent": [
           "error",
           2,
-          { "offsetTernaryExpressions": true }
+          {
+            "offsetTernaryExpressions": true,
+            "SwitchCase": 1
+          }
       ],
       "linebreak-style": [
           "error",

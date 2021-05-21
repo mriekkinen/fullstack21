@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import './App.css'
 import Blog from './components/Blog'
 import BlogForm from './components/BlogForm'
@@ -10,22 +10,23 @@ import WhoAmI from './components/WhoAmI'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import { setNotification } from './reducers/notificationReducer'
+import {
+  initBlogs,
+  createBlog,
+  updateBlog as update,
+  removeBlog as remove
+} from './reducers/blogReducer'
 
 const App = () => {
-  const [ blogs, setBlogs ] = useState([])
   const [ user, setUser ] = useState(null)
+
+  const blogs = useSelector(state => state.blogs)
 
   const dispatch = useDispatch()
 
   const blogFormRef = useRef()
 
-  const compare = (a, b) => b.likes - a.likes
-
-  useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs(blogs.sort(compare))
-    )
-  }, [])
+  useEffect(() => dispatch(initBlogs()), [])
 
   useEffect(() => {
     const userJson = window.localStorage.getItem('bloglistUser')
@@ -35,14 +36,6 @@ const App = () => {
     blogService.setToken(user.token)
     setUser(user)
   }, [])
-
-  /*
-  const showNotification = (type, message) => {
-    //setNotification({ type, message })
-    //setTimeout(() => setNotification({}), 5000)
-    dispatch(setNotification(type, message))
-  }
-  */
 
   const login = async (credentials) => {
     try {
@@ -64,46 +57,38 @@ const App = () => {
 
   const addBlog = async (newBlog) => {
     try {
-      const savedBlog = await blogService.create(newBlog)
-
-      setBlogs(blogs.concat(savedBlog).sort(compare))
+      dispatch(createBlog(newBlog))
       blogFormRef.current.setVisible(false)
       dispatch(setNotification(
         'success',
-        `a new blog ${savedBlog.title} by ${savedBlog.author} added`
+        `a new blog ${newBlog.title} by ${newBlog.author} added`
       ))
-    } catch (exception) {
+    } catch (error) {
       dispatch(setNotification(
         'error',
-        exception.response.data.error
+        error.response.data.error
       ))
     }
   }
 
   const updateBlog = async (id, newBlog) => {
     try {
-      const returnedBlog = await blogService.update(id, newBlog)
-
-      const updatedBlogs = blogs.map(b => b.id !== id ? b : returnedBlog)
-      setBlogs(updatedBlogs.sort(compare))
+      dispatch(update(id, newBlog))
       dispatch(setNotification(
         'success',
-        `liked blog ${returnedBlog.title} by ${returnedBlog.author}`
+        `liked blog ${newBlog.title} by ${newBlog.author}`
       ))
-    } catch (exception) {
+    } catch (error) {
       dispatch(setNotification(
         'error',
-        `update failed: ${exception.response.data.error}`
+        `update failed: ${error.response.data.error}`
       ))
     }
   }
 
   const removeBlog = async (id, blog) => {
     try {
-      await blogService.remove(id)
-
-      const filteredBlogs = blogs.filter(b => b.id !== id)
-      setBlogs(filteredBlogs)
+      dispatch(remove(id))
       dispatch(setNotification(
         'success',
         `removed blog ${blog.title} by ${blog.author}`

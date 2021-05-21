@@ -8,12 +8,9 @@ const BlogForm = ({ createBlog }) => {
 
   const addBlog = (e) => {
     e.preventDefault()
-
-    const newBlog = {
+    createBlog({
       title, author, url
-    }
-
-    createBlog(newBlog)
+    })
   }
 
   return (

@@ -1,20 +1,24 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
-import Blog from './Blog'
+import { Link } from 'react-router-dom'
+
+const BlogEntry = ({ blog }) => (
+  <div className='blog'>
+    <Link to={`/blogs/${blog.id}`}>
+      {blog.title} {blog.author}
+    </Link>
+  </div>
+)
 
 const Blogs = () => {
   const blogs = useSelector(state => state.blogs)
-  const user = useSelector(state => state.user)
 
   return (
     <div id='blogs'>
       {blogs.map(blog =>
-        <Blog
+        <BlogEntry
           key={blog.id}
-          blog={blog}
-          isOwner={
-            blog.user && blog.user.username === user.username
-          } />
+          blog={blog} />
       )}
     </div>
   )

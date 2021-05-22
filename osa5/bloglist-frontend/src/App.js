@@ -5,6 +5,7 @@ import {
   Switch, Route
 } from 'react-router-dom'
 import './App.css'
+import Blog from './components/Blog'
 import Blogs from './components/Blogs'
 import BlogForm from './components/BlogForm'
 import LoginForm from './components/LoginForm'
@@ -58,6 +59,9 @@ const App = () => {
           </Route>
           <Route path='/users/:id'>
             <User />
+          </Route>
+          <Route path='/blogs/:id'>
+            <Blog />
           </Route>
         </Switch>
       </Router>

@@ -1,8 +1,12 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
+import { useDispatch } from 'react-redux'
+import { updateBlog, removeBlog } from '../reducers/blogReducer'
 
-const Blog = ({ blog, update, remove }) => {
+const Blog = ({ blog, isOwner }) => {
   const [ isExpanded, setExpanded ] = useState(false)
+
+  const dispatch = useDispatch()
 
   const like = () => {
     const newBlog = {
@@ -13,12 +17,12 @@ const Blog = ({ blog, update, remove }) => {
       url: blog.url
     }
 
-    update(blog.id, newBlog)
+    dispatch(updateBlog(blog.id, newBlog))
   }
 
   const confirmRemove = () => {
     if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
-      remove(blog.id, blog)
+      dispatch(removeBlog(blog.id, blog))
     }
   }
 
@@ -52,7 +56,7 @@ const Blog = ({ blog, update, remove }) => {
             <div>
               {blog.user.name}
             </div>
-            {remove && (
+            {isOwner && (
               <div>
                 <button
                   className='remove-blog-btn'
@@ -69,8 +73,7 @@ const Blog = ({ blog, update, remove }) => {
 
 Blog.propTypes = {
   blog: PropTypes.object.isRequired,
-  update: PropTypes.func.isRequired,
-  remove: PropTypes.func
+  isOwner: PropTypes.bool
 }
 
 export default Blog

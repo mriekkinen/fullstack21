@@ -1,4 +1,5 @@
 import blogService from '../services/blogs'
+import { setNotification } from './notificationReducer'
 
 const compare = (a, b) => b.likes - a.likes
 
@@ -29,33 +30,73 @@ export const initBlogs = () => {
   }
 }
 
-export const createBlog = (newBlog) => {
+export const createBlog = (newBlog, blogFormRef) => {
   return async (dispatch) => {
-    const savedBlog = await blogService.create(newBlog)
-    dispatch({
-      type: 'BLOG/CREATE',
-      data: savedBlog
-    })
+    try {
+      const savedBlog = await blogService.create(newBlog)
+      dispatch({
+        type: 'BLOG/CREATE',
+        data: savedBlog
+      })
+
+      if (blogFormRef) {
+        blogFormRef.current.setVisible(false)
+      }
+
+      dispatch(setNotification(
+        'success',
+        `a new blog ${savedBlog.title} by ${savedBlog.author} added`
+      ))
+    } catch (error) {
+      dispatch(setNotification(
+        'error',
+        `creation failed: ${error.response.data.error}`
+      ))
+    }
   }
 }
 
 export const updateBlog = (id, newBlog) => {
   return async (dispatch) => {
-    const savedBlog = await blogService.update(id, newBlog)
-    dispatch({
-      type: 'BLOG/UPDATE',
-      data: savedBlog
-    })
+    try {
+      const savedBlog = await blogService.update(id, newBlog)
+      dispatch({
+        type: 'BLOG/UPDATE',
+        data: savedBlog
+      })
+
+      dispatch(setNotification(
+        'success',
+        `liked blog ${newBlog.title} by ${newBlog.author}`
+      ))
+    } catch (error) {
+      dispatch(setNotification(
+        'error',
+        `update failed: ${error.response.data.error}`
+      ))
+    }
   }
 }
 
-export const removeBlog = (id) => {
+export const removeBlog = (id, blog) => {
   return async (dispatch) => {
-    await blogService.remove(id)
-    dispatch({
-      type: 'BLOG/REMOVE',
-      data: { id }
-    })
+    try {
+      await blogService.remove(id)
+      dispatch({
+        type: 'BLOG/REMOVE',
+        data: { id }
+      })
+
+      dispatch(setNotification(
+        'success',
+        `removed blog ${blog.title} by ${blog.author}`
+      ))
+    } catch (error) {
+      dispatch(setNotification(
+        'error',
+        `removal failed: ${error.response.data.error}`
+      ))
+    }
   }
 }
 

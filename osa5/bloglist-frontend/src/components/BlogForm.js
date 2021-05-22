@@ -1,16 +1,22 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
+import { useDispatch } from 'react-redux'
+import { createBlog } from '../reducers/blogReducer'
 
-const BlogForm = ({ createBlog }) => {
+const BlogForm = ({ blogFormRef }) => {
   const [ title, setTitle ] = useState('')
   const [ author, setAuthor ] = useState('')
   const [ url, setUrl ] = useState('')
 
+  const dispatch = useDispatch()
+
   const addBlog = (e) => {
     e.preventDefault()
-    createBlog({
+    const newBlog = {
       title, author, url
-    })
+    }
+
+    dispatch(createBlog(newBlog, blogFormRef))
   }
 
   return (
@@ -61,7 +67,7 @@ const BlogForm = ({ createBlog }) => {
 }
 
 BlogForm.propTypes = {
-  createBlog: PropTypes.func.isRequired
+  blogFormRef: PropTypes.object.isRequired
 }
 
 export default BlogForm

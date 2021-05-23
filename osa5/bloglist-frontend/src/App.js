@@ -11,9 +11,9 @@ import BlogForm from './components/BlogForm'
 import LoginForm from './components/LoginForm'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
-import WhoAmI from './components/WhoAmI'
 import Users from './components/Users'
 import User from './components/User'
+import NavBar from './components/NavBar'
 import { initLogin } from './reducers/loginReducer'
 import { initBlogs } from './reducers/blogReducer'
 import { initUsers } from './reducers/userReducer'
@@ -44,12 +44,11 @@ const App = () => {
   )
 
   const mainContent = () => (
-    <div className='main-content'>
-      <h2>blogs</h2>
-      <WhoAmI
-        name={user.name} />
-
-      <Router>
+    <Router>
+      <NavBar />
+      <div className='main-content'>
+        <Notification />
+        <h2>blog app</h2>
         <Switch>
           <Route exact path='/'>
             {frontPage()}
@@ -64,13 +63,12 @@ const App = () => {
             <Blog />
           </Route>
         </Switch>
-      </Router>
-    </div>
+      </div>
+    </Router>
   )
 
   return (
     <div>
-      <Notification />
       {user === null
         ? <LoginForm />
         : mainContent()

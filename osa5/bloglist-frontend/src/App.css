@@ -1,3 +1,12 @@
+body {
+  margin: 0;
+}
+
+div.main-content,
+div.login-form {
+  margin: 8px;
+}
+
 div.notification {
   padding: 10px;
   margin: 0;
@@ -21,15 +30,29 @@ div.notification.success {
   background-color: #81C784;
 }
 
-.login-form input, .create-form input {
+nav.top-navbar {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 10px;
+  background-color: lightgray;
+}
+
+nav.top-navbar > div {
+  padding: 7px 0 7px 5px;
+}
+
+.login-form input,
+.create-form input {
   margin: 0px 5px;
 }
 
-.login-form button, .create-form button {
+.login-form button,
+.create-form button {
   margin: 5px 0;
 }
 
-.whoami button, .blog button {
+.whoami button,
+.blog button {
   margin: 0 5px;
 }
 

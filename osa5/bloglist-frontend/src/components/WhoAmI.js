@@ -1,23 +1,21 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { logout } from '../reducers/loginReducer'
 
-const WhoAmI = ({ name }) => {
+const WhoAmI = () => {
   const dispatch = useDispatch()
+  const user = useSelector(state => state.user)
 
   return (
-    <p className='whoami'>
-      {name} logged in
+    <div className='whoami'>
+      {user.name} logged in
       <button onClick={() => dispatch(logout())}>
         log out
       </button>
-    </p>
+    </div>
   )
 }
 
-WhoAmI.propTypes = {
-  name: PropTypes.string.isRequired
-}
+WhoAmI.propTypes = {}
 
 export default WhoAmI

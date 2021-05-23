@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { login } from '../reducers/loginReducer'
+import Notification from './Notification'
 
 const LoginForm = () => {
   const [ username, setUsername ] = useState('')
@@ -16,6 +17,7 @@ const LoginForm = () => {
 
   return (
     <div className='login-form'>
+      <Notification />
       <h2>Log in to application</h2>
       <form onSubmit={handleLogin}>
         <div>

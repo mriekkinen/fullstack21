@@ -17,6 +17,7 @@ import NavBar from './components/NavBar'
 import { initLogin } from './reducers/loginReducer'
 import { initBlogs } from './reducers/blogReducer'
 import { initUsers } from './reducers/userReducer'
+import styled from 'styled-components'
 
 const App = () => {
   const user = useSelector(state => state.user)
@@ -46,7 +47,7 @@ const App = () => {
   const mainContent = () => (
     <Router>
       <NavBar />
-      <div className='main-content'>
+      <MainContent>
         <Notification />
         <h2>blog app</h2>
         <Switch>
@@ -63,7 +64,7 @@ const App = () => {
             <Blog />
           </Route>
         </Switch>
-      </div>
+      </MainContent>
     </Router>
   )
 
@@ -76,5 +77,10 @@ const App = () => {
     </div>
   )
 }
+
+const MainContent = styled.div`
+  max-width: 600px;
+  margin: 8px 3vw;
+`
 
 export default App

@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { createComment } from '../reducers/blogReducer'
+import { Button } from './Button'
 
 const CommentForm = ({ blog }) => {
   const [content, setContent] = useState('')
@@ -24,7 +25,7 @@ const CommentForm = ({ blog }) => {
           type='text'
           value={content}
           onChange={handleChange} />
-        <button>add comment</button>
+        <Button>add comment</Button>
       </form>
     </div>
   )

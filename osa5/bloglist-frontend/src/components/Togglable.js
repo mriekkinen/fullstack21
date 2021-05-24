@@ -1,5 +1,7 @@
 import React, { useState, useImperativeHandle } from 'react'
 import PropTypes from 'prop-types'
+import styled from 'styled-components'
+import { Button } from './Button'
 
 const Togglable = React.forwardRef((props, ref) => {
   const { buttonLabel, children } = props
@@ -14,17 +16,21 @@ const Togglable = React.forwardRef((props, ref) => {
       {isVisible
         ? <div>
             {children}
-            <button onClick={() => setVisible(false)}>
+            <FormButton onClick={() => setVisible(false)}>
               cancel
-            </button>
+            </FormButton>
           </div>
-        : <button onClick={() => setVisible(true)}>
+        : <FormButton onClick={() => setVisible(true)}>
             {buttonLabel}
-          </button>
+          </FormButton>
       }
     </>
   )
 })
+
+const FormButton = styled(Button)`
+  margin: 1px 0;
+`
 
 Togglable.propTypes = {
   buttonLabel: PropTypes.string.isRequired

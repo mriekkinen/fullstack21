@@ -3,6 +3,9 @@ import { useHistory, useRouteMatch } from 'react-router'
 import { useDispatch, useSelector } from 'react-redux'
 import { updateBlog, removeBlog } from '../reducers/blogReducer'
 import Comments from './Comments'
+import styled from 'styled-components'
+import { MdThumbUp } from 'react-icons/md'
+import { Button } from './Button'
 
 const selectBlog = match => state => {
   return match
@@ -47,24 +50,26 @@ const Blog = () => {
         {blog.title} {blog.author}
       </h2>
       <div>
-        <a href={blog.url}>{blog.url}</a>
+        <a
+          target='_blank'
+          rel='noopener noreferrer'
+          href={blog.url}>
+          {blog.url}
+        </a>
       </div>
       <div>
         {blog.likes} likes
-        <button onClick={() => like()}>
-          like
-        </button>
+        <LikeButton handleClick={() => like()} />
       </div>
       <div>
         added by {blog.user.name}
       </div>
       {isOwner && (
         <div>
-          <button
-            className='remove-blog-btn'
+          <RemoveBlogButton
             onClick={() => confirmRemove()}>
               remove
-          </button>
+          </RemoveBlogButton>
         </div>
       )}
       <Comments
@@ -72,6 +77,29 @@ const Blog = () => {
     </div>
   )
 }
+
+const LikeButtonContainer = styled.div`
+  display: flex;
+  align-items: center;
+`
+
+const LikeButton = ({ handleClick }) => (
+  <Button onClick={handleClick}>
+    <LikeButtonContainer>
+      <ThumbUpIcon /> like
+    </LikeButtonContainer>
+  </Button>
+)
+
+const ThumbUpIcon = styled(MdThumbUp)`
+  width: 1em;
+  height: 1em;
+  padding-right: 3px;
+`
+
+const RemoveBlogButton = styled(Button)`
+  margin: 1px 0;
+`
 
 Blog.propTypes = {}
 

@@ -1,0 +1,19 @@
+POST http://localhost:3003/api/blogs/60a8cfa2a0ed35086178987a/comments
+Content-Type: application/json
+
+{
+  "content": "awesome article"
+}
+
+###
+
+POST http://localhost:3003/api/blogs/60a8cfa2a0ed35086178987a/comments
+Content-Type: application/json
+
+{
+  "content": "a must read for every developer"
+}
+
+###
+
+GET http://localhost:3003/api/blogs

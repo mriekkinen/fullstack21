@@ -2,6 +2,7 @@ import React from 'react'
 import { useHistory, useRouteMatch } from 'react-router'
 import { useDispatch, useSelector } from 'react-redux'
 import { updateBlog, removeBlog } from '../reducers/blogReducer'
+import Comments from './Comments'
 
 const selectBlog = match => state => {
   return match
@@ -66,6 +67,8 @@ const Blog = () => {
           </button>
         </div>
       )}
+      <Comments
+        blog={blog} />
     </div>
   )
 }

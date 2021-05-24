@@ -15,6 +15,13 @@ const blogReducer = (state = [], action) => {
         .sort(compare)
     case 'BLOG/REMOVE':
       return state.filter(b => b.id !== action.data.id)
+    case 'BLOG/ADD_COMMENT': {
+      const blog = state.find(b => b.id === action.data.id)
+      const newComments = [...blog.comments, action.data.comment]
+      const newBlog = { ...blog, comments: newComments }
+      return state
+        .map(b => b.id !== action.data.id ? b : newBlog)
+    }
     default:
       return state
   }
@@ -95,6 +102,26 @@ export const removeBlog = (id, blog) => {
       dispatch(setNotification(
         'error',
         `removal failed: ${error.response.data.error}`
+      ))
+    }
+  }
+}
+
+export const createComment = (id, newComment) => {
+  return async (dispatch) => {
+    try {
+      const savedComment = await blogService.addComment(id, newComment)
+      dispatch({
+        type: 'BLOG/ADD_COMMENT',
+        data: {
+          id,
+          comment: savedComment
+        }
+      })
+    } catch (error) {
+      dispatch(setNotification(
+        'error',
+        `adding a comment failed: ${error.response.data.error}`
       ))
     }
   }

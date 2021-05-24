@@ -1,11 +1,13 @@
 const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
+const Comment = require('../models/comment')
 const { userExtractor } = require('../utils/middleware')
 
 blogsRouter.get('/', async (request, response) => {
   const blogs = await Blog
     .find({})
     .populate('user', { username: 1, name: 1 })
+    .populate('comments', { content: 1 })
   response.json(blogs)
 })
 
@@ -35,12 +37,14 @@ blogsRouter.post('/', userExtractor, async (request, response) => {
 })
 
 blogsRouter.put('/:id', async (request, response) => {
-  const updatedBlog = await Blog.findByIdAndUpdate(
-    request.params.id,
-    request.body,
-    { new: true }
-  )
-  .populate('user', { username: 1, name: 1 })
+  const updatedBlog = await Blog
+    .findByIdAndUpdate(
+      request.params.id,
+      request.body,
+      { new: true }
+    )
+    .populate('user', { username: 1, name: 1 })
+    .populate('comments', { content: 1 })
 
   if (updatedBlog) {
     response.json(updatedBlog)
@@ -70,8 +74,26 @@ blogsRouter.delete('/:id', userExtractor, async (request, response) => {
     })
   }
 
+  await Comment.deleteMany({ blog: blog._id })
   await blog.delete()
+
   response.status(204).end()
+})
+
+blogsRouter.post('/:id/comments', async (request, response) => {
+  const blog = await Blog.findById(request.params.id)
+  const comment = new Comment(request.body)
+
+  if (!blog) {
+    return response.status(404).end()
+  }
+
+  comment.blog = blog._id
+  blog.comments.push(comment._id)
+  await comment.save()
+  await blog.save()
+
+  response.status(201).json(comment)
 })
 
 module.exports = blogsRouter

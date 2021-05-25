@@ -16,24 +16,24 @@ describe('Blog app', function() {
 
   describe('Login',function() {
     it('Succeeds with correct credentials', function() {
-      cy.get('input[name=username]').type('johnd')
-      cy.get('input[name=password]').type('salainen')
+      cy.get('input#username').type('johnd')
+      cy.get('input#password').type('salainen')
       cy.contains('log in').click()
 
-      cy.get('html').should('contain', 'John Doe logged in')
+      cy.get('#whoami').should('contain', 'John Doe')
     })
 
     it('Fails with wrong credentials', function() {
-      cy.get('input[name=username]').type('johnd')
-      cy.get('input[name=password]').type('wrong')
+      cy.get('input#username').type('johnd')
+      cy.get('input#password').type('wrong')
       cy.contains('log in').click()
 
-      cy.get('.notification')
+      cy.get('#notification')
         .should('contain', 'wrong username or password')
         .and('have.css', 'background-color', 'rgb(229, 115, 115)')
 
-      cy.get('html')
-        .should('not.contain', 'John Doe logged in')
+      cy.get('#whoami')
+        .should('not.exist')
     })
   })
 
@@ -50,12 +50,25 @@ describe('Blog app', function() {
 
     it('A blog can be created', function() {
       cy.contains('create new blog').click()
-      cy.get('input[name=title]').type('Example Blog')
-      cy.get('input[name=author]').type('John Doe')
-      cy.get('input[name=url]').type('https://blog.example.com')
+      cy.get('input#title').type('Example Blog')
+      cy.get('input#author').type('John Doe')
+      cy.get('input#url').type('https://blog.example.com')
       cy.get('button[type=submit]').click()
 
       cy.get('#blogs').should('contain', 'Example Blog John Doe')
+    })
+
+    it('A blog can be viewed', function() {
+      cy.createBlog({
+        title: 'Example Blog',
+        author: 'John Doe',
+        url: 'https://blog.example.com',
+        likes: 10
+      })
+
+      cy.contains('Example Blog John Doe').click()
+
+      cy.get('#blog').should('contain', 'Example Blog John Doe')
     })
 
     it('A blog can be liked', function() {
@@ -66,12 +79,11 @@ describe('Blog app', function() {
         likes: 10
       })
 
-      cy.contains('Example Blog John Doe').parent().as('newBlog')
+      cy.contains('Example Blog John Doe').click()
 
-      cy.get('@newBlog').contains('view').click()
-      cy.get('@newBlog').should('contain', 'likes 10')
-      cy.get('@newBlog').contains('like').click()
-      cy.get('@newBlog').should('contain', 'likes 11')
+      cy.get('#blog').should('contain', '10 likes')
+      cy.get('#blog').contains('like').click()
+      cy.get('#blog').should('contain', '11 likes')
     })
 
     it('A blog can be removed', function() {
@@ -82,11 +94,9 @@ describe('Blog app', function() {
         likes: 10
       })
 
-      cy.get('html').should('contain', 'Example Blog John Doe')
+      cy.contains('Example Blog John Doe').click()
 
-      cy.contains('Example Blog John Doe').parent().as('newBlog')
-      cy.get('@newBlog').contains('view').click()
-      cy.get('@newBlog').contains('remove').click()
+      cy.get('#blog').contains('remove').click()
 
       cy.get('html').should('not.contain', 'Example Blog John Doe')
     })
@@ -110,9 +120,8 @@ describe('Blog app', function() {
         password: 'salainen'
       })
 
-      cy.contains('Example Blog John Doe').parent().as('newBlog')
-      cy.get('@newBlog').contains('view').click()
-      cy.get('@newBlog').should('not.contain', 'remove')
+      cy.contains('Example Blog John Doe').click()
+      cy.get('#blog').should('not.contain', 'remove')
     })
 
     it('Blogs are ranked by the number of likes', function() {

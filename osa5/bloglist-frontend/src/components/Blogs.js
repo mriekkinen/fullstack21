@@ -14,7 +14,7 @@ const BlogDiv = styled.div`
 `
 
 const BlogEntry = ({ blog }) => (
-  <BlogDiv>
+  <BlogDiv className='blog'>
     <Link to={`/blogs/${blog.id}`}>
       {blog.title} {blog.author}
     </Link>
@@ -25,7 +25,7 @@ const Blogs = () => {
   const blogs = useSelector(state => state.blogs)
 
   return (
-    <div>
+    <div id='blogs'>
       {blogs.map(blog =>
         <BlogEntry
           key={blog.id}

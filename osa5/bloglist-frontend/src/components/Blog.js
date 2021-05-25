@@ -45,7 +45,7 @@ const Blog = () => {
   }
 
   return (
-    <div>
+    <div id='blog'>
       <h2>
         {blog.title} {blog.author}
       </h2>

@@ -11,7 +11,9 @@ const Notification = () => {
   }
 
   return (
-    <Message type={type}>
+    <Message
+      id='notification'
+      type={type}>
       {message}
     </Message>
   )

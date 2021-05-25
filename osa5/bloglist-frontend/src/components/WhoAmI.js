@@ -10,7 +10,7 @@ const WhoAmI = () => {
   const user = useSelector(state => state.user)
 
   return (
-    <UserContainer>
+    <UserContainer id='whoami'>
       <UserIcon />
       {user.name}
       <Button onClick={() => dispatch(logout())}>

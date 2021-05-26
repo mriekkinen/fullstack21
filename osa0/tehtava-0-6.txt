@@ -1,0 +1,20 @@
+title Tehtävä 0.6: Uusi muistiinpano
+
+note over selain:
+Käyttäjä kirjoittaa lomakkeelle "hello"
+ja klikkaa nappia "Send"
+end note
+
+note over selain:
+Selain renderöi näytölle
+päivitetyn muistiinpanojen listan
+end note
+
+selain->palvelin: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+
+note over palvelin:
+Palvelin lisää muistiinpanon
+muistiinpanojen listan loppuun
+end note
+
+palvelin-->selain: {"message":"note created"}

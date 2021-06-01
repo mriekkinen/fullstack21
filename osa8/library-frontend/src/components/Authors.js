@@ -3,10 +3,10 @@ import { useQuery, useMutation } from '@apollo/client'
 import { ALL_AUTHORS, EDIT_AUTHOR } from '../queries'
 import Select from 'react-select'
 
-const Authors = (props) => {
+const Authors = ({ token, show }) => {
   const result = useQuery(ALL_AUTHORS)
 
-  if (!props.show) {
+  if (!show) {
     return null
   }
 
@@ -41,12 +41,13 @@ const Authors = (props) => {
       </table>
 
       <SetBirthyear
+        token={token}
         authors={authors} />
     </div>
   )
 }
 
-const SetBirthyear = ({ authors }) => {
+const SetBirthyear = ({ token, authors }) => {
   const [selectedAuthor, setSelectedAuthor] = useState(null)
   const [born, setBorn] = useState('')
 

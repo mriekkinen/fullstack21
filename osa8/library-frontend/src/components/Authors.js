@@ -40,14 +40,15 @@ const Authors = ({ token, show }) => {
         </tbody>
       </table>
 
-      <SetBirthyear
-        token={token}
-        authors={authors} />
+      {token &&
+        <SetBirthyear
+          authors={authors} />
+      }
     </div>
   )
 }
 
-const SetBirthyear = ({ token, authors }) => {
+const SetBirthyear = ({ authors }) => {
   const [selectedAuthor, setSelectedAuthor] = useState(null)
   const [born, setBorn] = useState('')
 

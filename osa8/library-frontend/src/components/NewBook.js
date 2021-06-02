@@ -10,10 +10,6 @@ const NewBook = ({ setError, show }) => {
   const [genres, setGenres] = useState([])
 
   const [ createBook ] = useMutation(CREATE_BOOK, {
-    refetchQueries: [
-      { query: ALL_BOOKS },
-      { query: ALL_AUTHORS }
-    ],
     onError: (error) => {
       setError(error.graphQLErrors[0].message)
     }
@@ -26,12 +22,18 @@ const NewBook = ({ setError, show }) => {
   const submit = async (event) => {
     event.preventDefault()
 
-    createBook({ variables: {
-      title,
-      author,
-      published: Number(published),
-      genres
-    }})
+    createBook({
+      variables: {
+        title,
+        author,
+        published: Number(published),
+        genres
+      }, refetchQueries: [
+        { query: ALL_BOOKS },
+        { query: ALL_AUTHORS },
+        { query: ALL_BOOKS, variables: { genre } }
+      ]
+    })
 
     setTitle('')
     setPublished('')

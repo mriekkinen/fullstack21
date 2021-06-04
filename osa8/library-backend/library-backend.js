@@ -91,11 +91,6 @@ const resolvers = {
     },
     allAuthors: () => Author.find({})
   },
-  Author: {
-    bookCount: (root) => {
-      return Book.countDocuments({ author: root.id })
-    }
-  },
   Book: {
     author: (root) => Author.findById(root.author)
   },
@@ -132,12 +127,15 @@ const resolvers = {
       try {
         let author = await Author.findOne({ name: args.author })
         if (!author) {
-          author = new Author({ name: args.author })
+          author = new Author({ name: args.author, bookCount: 0 })
           await author.save()
         }
 
         const newBook = new Book({ ...args, author: author._id })
         await newBook.save()
+
+        author.bookCount++
+        await author.save()
 
         pubsub.publish('BOOK/ADD', { bookAdded: newBook })
 

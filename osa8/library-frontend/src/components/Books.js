@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import _ from 'lodash'
-import { useLazyQuery, useQuery } from '@apollo/client'
-import { ALL_BOOKS } from '../queries'
+import { useLazyQuery, useQuery, useSubscription } from '@apollo/client'
+import { ALL_BOOKS, BOOK_ADDED } from '../queries'
 
-const Books = ({ show }) => {
+const Books = ({ updateCacheWith, show }) => {
   const [genres, setGenres] = useState([])
   const [genre, setGenre] = useState(null)
   const [allBooks, result] = useLazyQuery(ALL_BOOKS)
@@ -25,6 +25,17 @@ const Books = ({ show }) => {
       setGenres([...new Set(genreList)])
     }
   }, [resultAll.data])
+
+  useSubscription(BOOK_ADDED, {
+    onSubscriptionData: ({ subscriptionData }) => {
+      const newBook = subscriptionData.data.bookAdded
+      if (updateCacheWith(newBook)) {
+        window.alert(
+          `Received a new book from the server:\n\n"${newBook.title}"\nby ${newBook.author.name}`
+        )
+      }
+    }
+  })
 
   if (!show) {
     return null

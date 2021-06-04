@@ -16,6 +16,7 @@ export const BOOK_DETAILS = gql`
     title
     author {
       name
+      id
     }
     published
     genres

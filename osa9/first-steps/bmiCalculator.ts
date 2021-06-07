@@ -13,13 +13,13 @@ type Category =
   'Obese Class II (Severely obese)' |
   'Obese Class III (Very severely obese)';
 
-const parseArguments = (arguments: string[]): BmiValues => {
-  if (process.argv.length !== 4) {
+const parseArguments = (args: string[]): BmiValues => {
+  if (args.length !== 4) {
     throw new Error('invalid number of arguments: expected 2 (height and weight)');
   }
 
-  const height = Number(process.argv[2]);
-  const weight = Number(process.argv[3]);
+  const height = Number(args[2]);
+  const weight = Number(args[3]);
 
   if (isNaN(height) || isNaN(weight)) {
     throw new Error('invalid argument: height and weight should be numbers');
@@ -30,7 +30,7 @@ const parseArguments = (arguments: string[]): BmiValues => {
   }
 }
 
-const calculateBmi = (height: number, weight: number): string => {
+const calculateBmi = (height: number, weight: number): Category => {
   const bmi = weight / ((height / 100) ** 2);
 
   if (bmi < 15) {
@@ -48,7 +48,7 @@ const calculateBmi = (height: number, weight: number): string => {
   } else if (bmi < 40) {
     return 'Obese Class II (Severely obese)';
   } else {
-    return 'Obese Class III (Very severely obese)	';
+    return 'Obese Class III (Very severely obese)';
   }
 }
 

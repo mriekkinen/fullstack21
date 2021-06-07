@@ -20,12 +20,12 @@ interface ExerciseResult {
   average: number;
 }
 
-const parseExArguments = (arguments: string[]): ExerciseValues => {
-  if (arguments.length < 3) {
+const parseExArguments = (args: string[]): ExerciseValues => {
+  if (args.length < 3) {
     throw new Error('too few arguments: expected at least 1');
   }
 
-  const hours = arguments.slice(2).map(s => {
+  const hours = args.slice(2).map(s => {
     const h = Number(s)
     if (isNaN(h)) {
       throw new Error(`Non-numeric argument: ${s}`);

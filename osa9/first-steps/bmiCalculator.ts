@@ -1,4 +1,4 @@
-import { calculateBmi } from './bmi'
+import { calculateBmi } from './bmi';
 
 interface BmiValues {
   height: number;
@@ -19,8 +19,8 @@ const parseArguments = (args: string[]): BmiValues => {
 
   return {
     height, weight
-  }
-}
+  };
+};
 
 try {
   const { height, weight } = parseArguments(process.argv);
@@ -28,5 +28,6 @@ try {
 
   console.log(result);
 } catch (error) {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   console.log(error.message);
 }

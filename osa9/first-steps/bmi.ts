@@ -28,4 +28,4 @@ export const calculateBmi = (height: number, weight: number): Category => {
   } else {
     return 'Obese Class III (Very severely obese)';
   }
-}
+};

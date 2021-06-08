@@ -26,7 +26,7 @@ const parseExArguments = (args: string[]): ExerciseValues => {
   }
 
   const hours = args.slice(2).map(s => {
-    const h = Number(s)
+    const h = Number(s);
     if (isNaN(h)) {
       throw new Error(`Non-numeric argument: ${s}`);
     }
@@ -38,8 +38,8 @@ const parseExArguments = (args: string[]): ExerciseValues => {
   const daily = hours.slice(1);
   return {
     daily, target
-  }
-}
+  };
+};
 
 const calculateExercises = (daily: number[], target: number): ExerciseResult => {
   const trainingHours = daily.reduce((s, h) => s + h, 0);
@@ -68,8 +68,8 @@ const calculateExercises = (daily: number[], target: number): ExerciseResult => 
     ratingDescription,
     target,
     average
-  }
-}
+  };
+};
 
 try {
   const { daily, target } = parseExArguments(process.argv);
@@ -77,5 +77,6 @@ try {
 
   console.log(result);
 } catch (error) {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   console.log(error.message);
 }

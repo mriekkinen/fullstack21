@@ -1,0 +1,10 @@
+POST http://localhost:3001/api/patients
+Content-Type: application/json
+
+{
+  "name": "Fox Mulder",
+  "dateOfBirth": "1961-10-13",
+  "ssn": "131061-911X",
+  "gender": "male",
+  "occupation": "FBI Special Agent"
+}

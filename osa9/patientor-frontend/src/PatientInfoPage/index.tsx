@@ -14,7 +14,7 @@ const genderIconName = new Map<Gender, SemanticICONS>([
 
 const PatientInfoPage = () => {
   const { id } = useParams<{ id: string }>();
-  const [{ patients }, dispatch] = useStateValue();
+  const [{ patients, diagnoses }, dispatch] = useStateValue();
 
   const fetchFullPatientInfo = async () => {
     try {
@@ -39,6 +39,20 @@ const PatientInfoPage = () => {
       <h2>{patient.name} {genderIcon}</h2>
       <div>ssn: {patient.ssn}</div>
       <div>occupation: {patient.occupation}</div>
+
+      <h3>entries</h3>
+      {patient.entries?.map(entry =>
+        <div key={entry.date}>
+          {entry.date} <i>{entry.description}</i>
+          <ul>
+            {entry.diagnosisCodes?.map(code =>
+              <li key={code}>
+                {code} {diagnoses[code]?.name}
+              </li>
+            )}
+          </ul>
+        </div>
+      )}
     </div>
   );
 };

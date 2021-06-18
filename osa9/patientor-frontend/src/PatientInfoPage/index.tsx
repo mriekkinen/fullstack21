@@ -5,6 +5,7 @@ import { Icon, SemanticICONS } from 'semantic-ui-react';
 import { useStateValue, updatePatient } from '../state';
 import { apiBaseUrl } from "../constants";
 import { Gender, Patient } from '../types';
+import EntryDetails from './EntryDetails';
 
 const genderIconName = new Map<Gender, SemanticICONS>([
   [Gender.Male, "mars"],
@@ -14,7 +15,7 @@ const genderIconName = new Map<Gender, SemanticICONS>([
 
 const PatientInfoPage = () => {
   const { id } = useParams<{ id: string }>();
-  const [{ patients, diagnoses }, dispatch] = useStateValue();
+  const [{ patients }, dispatch] = useStateValue();
 
   const fetchFullPatientInfo = async () => {
     try {
@@ -42,16 +43,9 @@ const PatientInfoPage = () => {
 
       <h3>entries</h3>
       {patient.entries?.map(entry =>
-        <div key={entry.date}>
-          {entry.date} <i>{entry.description}</i>
-          <ul>
-            {entry.diagnosisCodes?.map(code =>
-              <li key={code}>
-                {code} {diagnoses[code]?.name}
-              </li>
-            )}
-          </ul>
-        </div>
+        <EntryDetails
+          key={entry.date}
+          entry={entry} />
       )}
     </div>
   );

@@ -1,0 +1,44 @@
+POST http://localhost:3001/api/patients/d27736ec-f723-11e9-8f0b-362b9e155667/entries
+Content-Type: application/json
+
+{
+  "date": "1989-05-21",
+  "specialist": "MD House",
+  "type": "HealthCheck",
+  "description": "Yearly control visit. High blood pressure.",
+  "healthCheckRating": 1
+}
+
+###
+
+POST http://localhost:3001/api/patients/d27736ec-f723-11e9-8f0b-362b9e155667/entries
+Content-Type: application/json
+
+{
+  "date": "1989-01-21",
+  "specialist": "MD House",
+  "type": "OccupationalHealthcare",
+  "employerName": "Bad Guys, Inc.",
+  "description": "Sprained ankle.",
+  "sickLeave": {
+    "startDate": "2021-06-21",
+    "endDate": "2021-06-25"
+  }
+}
+
+###
+
+POST http://localhost:3001/api/patients/d27736ec-f723-11e9-8f0b-362b9e155667/entries
+Content-Type: application/json
+
+{
+  "date": "1988-12-24",
+  "specialist": "MD House",
+  "diagnosisCodes": [ "S03.5" ],
+  "type": "Hospital",
+  "description": "Sustained injuries from a fall from a tall building.",
+  "discharge": {
+    "date": "1989-01-01",
+    "criteria": "Injuries healed"
+  }
+}

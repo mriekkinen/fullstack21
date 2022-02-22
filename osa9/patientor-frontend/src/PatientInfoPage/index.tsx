@@ -4,9 +4,8 @@ import { useParams } from 'react-router-dom';
 import { Button, Icon, SemanticICONS } from 'semantic-ui-react';
 import { useStateValue, updatePatient } from '../state';
 import { apiBaseUrl } from "../constants";
-import { Entry, Gender, Patient } from '../types';
+import { Entry, EntryFormValues, Gender, Patient } from '../types';
 import EntryDetails from './EntryDetails';
-import { EntryFormValues } from '../AddEntryModal/AddEntryForm';
 import AddEntryModal from '../AddEntryModal';
 
 const genderIconName = new Map<Gender, SemanticICONS>([
@@ -19,19 +18,19 @@ const PatientInfoPage = () => {
   const { id } = useParams<{ id: string }>();
   const [{ patients }, dispatch] = useStateValue();
 
-  const [modalOpen, setModalOpen] = React.useState<boolean>(false);
+  const [modalType, setModalType] = React.useState<Entry['type'] | undefined>();
   const [error, setError] = React.useState<string | undefined>();
 
-  const openModal = (): void => setModalOpen(true);
+  const openModal = (type: Entry['type']): void => setModalType(type);
 
   const closeModal = (): void => {
-    setModalOpen(false);
+    setModalType(undefined);
     setError(undefined);
   };
 
-  const submitNewEntry = async (values: EntryFormValues) => {
+  const submitNewEntry = (type: Entry['type']) => async (values: EntryFormValues) => {
     try {
-      const valuesWithType = { ...values, type: 'HealthCheck' };
+      const valuesWithType = { ...values, type };
       const { data: newEntry } = await axios.post<Entry>(
         `${apiBaseUrl}/patients/${id}/entries`,
         valuesWithType
@@ -82,17 +81,30 @@ const PatientInfoPage = () => {
       <h3>entries</h3>
       {patient.entries.map(entry =>
         <EntryDetails
-          key={entry.date}
+          key={entry.id}
           entry={entry} />
       )}
 
       <AddEntryModal
-        modalOpen={modalOpen}
-        onSubmit={submitNewEntry}
+        type='HealthCheck'
+        modalOpen={modalType == 'HealthCheck'}
+        onSubmit={submitNewEntry('HealthCheck')}
         error={error}
         onClose={closeModal}
       />
-      <Button onClick={() => openModal()}>Add New Entry</Button>
+      <AddEntryModal
+        type='OccupationalHealthcare'
+        modalOpen={modalType == 'OccupationalHealthcare'}
+        onSubmit={submitNewEntry('OccupationalHealthcare')}
+        error={error}
+        onClose={closeModal}
+      />
+      <Button onClick={() => openModal('HealthCheck')}>
+        Add Health Check Entry
+      </Button>
+      <Button onClick={() => openModal('OccupationalHealthcare')}>
+        Add Occupational Healthcare Entry
+      </Button>
     </div>
   );
 };

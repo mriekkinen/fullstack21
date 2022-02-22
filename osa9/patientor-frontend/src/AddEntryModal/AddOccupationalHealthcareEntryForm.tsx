@@ -1,21 +1,19 @@
 import React from 'react';
 import { Grid, Button } from "semantic-ui-react";
-import { Field, Formik, Form } from "formik";
+import { Field, Formik, Form, FormikErrors } from "formik";
 
-import { HealthCheckEntry, HealthCheckRating } from '../types';
+import { EntryFormValues, OccupationalHealthcareEntryFormValues } from '../types';
 import { useStateValue } from '../state/state';
 import {
-  DiagnosisSelection, NumberField, TextField
+  DiagnosisSelection, TextField
 } from '../AddPatientModal/FormField';
-
-export type EntryFormValues = Omit<HealthCheckEntry, "id" | "type">;
 
 interface Props {
   onSubmit: (values: EntryFormValues) => void;
   onCancel: () => void;
 }
 
-const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
+const AddOccupationHealthcareEntryForm = ({ onSubmit, onCancel }: Props) => {
   const [{ diagnoses }] = useStateValue();
 
   return (
@@ -25,22 +23,46 @@ const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
         specialist: "",
         diagnosisCodes: [],
         description: "",
-        healthCheckRating: 0
+        employerName: "",
+        sickLeave: {
+          startDate: "",
+          endDate: "",
+        }
       }}
       onSubmit={onSubmit}
       validate={values => {
         const requiredError = "Field is required";
-        const errors: { [field: string]: string } = {};
-        if (!values.date) {
-          errors.date = requiredError;
-        } else if (!/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(values.date)) {
-          errors.date = "Enter date as YYYY-MM-DD";
-        } else if (!Date.parse(values.date)) {
-          errors.date = "Invalid date";
-        }
+        const errors: FormikErrors<Required<OccupationalHealthcareEntryFormValues>> = {};
 
         if (!values.specialist) errors.specialist = requiredError;
         if (!values.description) errors.description = requiredError;
+        if (!values.employerName) errors.employerName = requiredError;
+
+        const validateDate = (date: string) => {
+          if (!date) {
+            return requiredError;
+          } else if (!/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(date)) {
+            return "Enter date as YYYY-MM-DD";
+          } else if (!Date.parse(date)) {
+            return "Invalid date";
+          }
+
+          return undefined;
+        };
+
+        const dateError = validateDate(values.date);
+        const sickLeaveStartError = validateDate(values.sickLeave.startDate);
+        const sickLeaveEndError = validateDate(values.sickLeave.endDate);
+
+        if (dateError) errors.date = dateError;
+
+        if (sickLeaveStartError || sickLeaveEndError) {
+          errors.sickLeave = {
+            startDate: sickLeaveStartError,
+            endDate: sickLeaveEndError
+          };
+        }
+
         return errors;
       }}
     >
@@ -75,12 +97,24 @@ const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
             />
 
             <Field
-              label="Health check rating"
-              placeholder="Health check rating"
-              name="healthCheckRating"
-              component={NumberField}
-              min={HealthCheckRating.Healthy}
-              max={HealthCheckRating.CriticalRisk}
+              label="Employer name"
+              placeholder="Employer name"
+              name="employerName"
+              component={TextField}
+            />
+
+            <Field
+              label="Sick leave start date"
+              placeholder="YYYY-MM-DD"
+              name="sickLeave.startDate"
+              component={TextField}
+            />
+
+            <Field
+              label="Sick leave end date"
+              placeholder="YYYY-MM-DD"
+              name="sickLeave.endDate"
+              component={TextField}
             />
 
             <Grid>
@@ -107,4 +141,4 @@ const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
   );
 };
 
-export default AddEntryForm;
+export default AddOccupationHealthcareEntryForm;

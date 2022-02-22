@@ -35,7 +35,7 @@ const addMedicalEntry = (patient: Patient, newEntry: NewEntry): Entry => {
   const id = uuid();
   const entry = { id, ...newEntry };
 
-  patient.entries.push(entry);
+  patient.entries.unshift(entry);
   return entry;
 };
 

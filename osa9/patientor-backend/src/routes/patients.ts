@@ -15,9 +15,13 @@ router.post('/', (req, res) => {
     const newPatient = toNewPatient(req.body);
     const savedPatient = patientService.addEntry(newPatient);
 
-    res.json(savedPatient);
+    return res.json(savedPatient);
   } catch (error) {
-    res.status(400).send(error.message);
+    if (error instanceof Error) {
+      return res.status(400).send(error.message);
+    } else {
+      return res.status(400).send('Unknown error');
+    }
   }
 });
 
@@ -28,7 +32,7 @@ router.get('/:id', (req, res) => {
     return res.status(404).end();
   }
 
-  res.json(patient);
+  return res.json(patient);
 });
 
 router.post('/:id/entries', (req, res) => {
@@ -42,9 +46,13 @@ router.post('/:id/entries', (req, res) => {
     const newEntry = toNewEntry(req.body);
     const savedEntry = patientService.addMedicalEntry(patient, newEntry);
 
-    res.json(savedEntry);
+    return res.json(savedEntry);
   } catch (error) {
-    res.status(400).send(error.message);
+    if (error instanceof Error) {
+      return res.status(400).send(error.message);
+    } else {
+      return res.status(400).send('Unknown error');
+    }
   }
 });
 

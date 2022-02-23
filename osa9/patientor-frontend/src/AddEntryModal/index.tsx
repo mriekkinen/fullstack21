@@ -3,6 +3,7 @@ import { Modal, Segment } from 'semantic-ui-react';
 import { Entry, EntryFormValues } from '../types';
 import AddHealthCheckEntryForm from './AddHealthCheckEntryForm';
 import AddOccupationalHealthcareEntryForm from './AddOccupationalHealthcareEntryForm';
+import AddHospitalEntryForm from './AddHospitalEntryForm';
 
 interface Props {
   type: Entry['type'];
@@ -22,6 +23,9 @@ const AddEntryModal = ({ type, modalOpen, onClose, onSubmit, error }: Props) => 
       }
       {type == 'OccupationalHealthcare' &&
         <AddOccupationalHealthcareEntryForm onSubmit={onSubmit} onCancel={onClose} />
+      }
+      {type == 'Hospital' &&
+        <AddHospitalEntryForm onSubmit={onSubmit} onCancel={onClose} />
       }
     </Modal.Content>
   </Modal>

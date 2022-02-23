@@ -99,11 +99,21 @@ const PatientInfoPage = () => {
         error={error}
         onClose={closeModal}
       />
+      <AddEntryModal
+        type='Hospital'
+        modalOpen={modalType == 'Hospital'}
+        onSubmit={submitNewEntry('Hospital')}
+        error={error}
+        onClose={closeModal}
+      />
       <Button onClick={() => openModal('HealthCheck')}>
         Add Health Check Entry
       </Button>
       <Button onClick={() => openModal('OccupationalHealthcare')}>
         Add Occupational Healthcare Entry
+      </Button>
+      <Button onClick={() => openModal('Hospital')}>
+        Add Hospital Entry
       </Button>
     </div>
   );

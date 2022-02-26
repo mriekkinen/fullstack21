@@ -5,15 +5,12 @@ import { ALL_BOOKS, BOOK_ADDED } from '../queries'
 
 const Books = ({ updateCacheWith, show }) => {
   const [genres, setGenres] = useState([])
-  const [genre, setGenre] = useState(null)
+  const [genre, setGenre] = useState(undefined)
   const [allBooks, result] = useLazyQuery(ALL_BOOKS)
   const resultAll = useQuery(ALL_BOOKS)
 
   useEffect(() => {
-    if (!genre) {
-      return allBooks()
-    }
-
+    // NB: In order to show all genres, genre should have the value undefined
     allBooks({ variables: { genre } })
   }, [genre]) // eslint-disable-line
 
@@ -85,7 +82,7 @@ const Books = ({ updateCacheWith, show }) => {
         )}
         <button
           type='button'
-          onClick={() => setGenre(null)}>
+          onClick={() => setGenre(undefined)}>
           all genres
         </button>
       </div>

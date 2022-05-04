@@ -1,0 +1,19 @@
+POST http://localhost:3001/api/blogs
+Content-Type: application/json
+
+{
+  "title": "Blog to be removed",
+  "author": "John Doe",
+  "url": "https://johndoe.example.com",
+  "likes": 1
+}
+
+###
+
+GET http://localhost:3001/api/blogs
+
+###
+
+DELETE http://localhost:3001/api/blogs/11
+Content-Type: application/json
+Authorization: bearer eyJ...

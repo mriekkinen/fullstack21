@@ -1,0 +1,22 @@
+POST http://localhost:3001/api/blogs
+Content-Type: application/json
+Authorization: bearer eyJ...
+
+{
+  "title": "Blog without URL",
+  "author": "John Doe",
+  "likes": 1
+}
+
+###
+
+POST http://localhost:3001/api/blogs
+Content-Type: application/json
+Authorization: bearer eyJ...
+
+{
+  "title": "Blog with invalid likes",
+  "author": "John Doe",
+  "url": "https://blog.example.com",
+  "likes": "invalid"
+}

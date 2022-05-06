@@ -21,3 +21,42 @@ Authorization: bearer eyJ...
   "url": "http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html",
   "likes": 5
 }
+
+###
+
+POST http://localhost:3001/api/blogs
+Content-Type: application/json
+Authorization: bearer eyJ...
+
+{
+  "title": "Is High Quality Software Worth the Cost?",
+  "author": "Martin Fowler",
+  "url": "https://martinfowler.com/articles/is-quality-worth-cost.html",
+  "likes": 1
+}
+
+###
+
+POST http://localhost:3001/api/blogs
+Content-Type: application/json
+Authorization: bearer eyJ...
+
+{
+  "title": "Microservices",
+  "author": "Martin Fowler",
+  "url": "https://www.martinfowler.com/articles/microservices.html",
+  "likes": 11
+}
+
+###
+
+POST http://localhost:3001/api/blogs
+Content-Type: application/json
+Authorization: bearer eyJ...
+
+{
+  "title": "Inversion of Control Containers and the Dependency Injection pattern",
+  "author": "Martin Fowler",
+  "url": "https://www.martinfowler.com/articles/injection.html",
+  "likes": 1
+}

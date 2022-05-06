@@ -9,7 +9,7 @@ const sequelize = new Sequelize(DATABASE_URL, {
       rejectUnauthorized: false,
     }
   },
-  logging: false  // Disable logging
+  // logging: false  // Disable logging
 })
 
 const connectToDatabase = async () => {

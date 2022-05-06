@@ -1,5 +1,6 @@
 POST http://localhost:3001/api/blogs
 Content-Type: application/json
+Authorization: bearer eyJ...
 
 {
   "title": "Blog to be updated",

@@ -18,6 +18,7 @@ Authorization: bearer eyJ...
 {
   "title": "Go To Statement Considered Harmful",
   "author": "Edsger W. Dijkstra",
+  "year": 1968,
   "url": "http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html",
   "likes": 5
 }
@@ -31,6 +32,7 @@ Authorization: bearer eyJ...
 {
   "title": "Is High Quality Software Worth the Cost?",
   "author": "Martin Fowler",
+  "year": 2019,
   "url": "https://martinfowler.com/articles/is-quality-worth-cost.html",
   "likes": 1
 }
@@ -44,6 +46,7 @@ Authorization: bearer eyJ...
 {
   "title": "Microservices",
   "author": "Martin Fowler",
+  "year": 2014,
   "url": "https://www.martinfowler.com/articles/microservices.html",
   "likes": 11
 }
@@ -57,6 +60,7 @@ Authorization: bearer eyJ...
 {
   "title": "Inversion of Control Containers and the Dependency Injection pattern",
   "author": "Martin Fowler",
+  "year": 2004,
   "url": "https://www.martinfowler.com/articles/injection.html",
   "likes": 1
 }

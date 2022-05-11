@@ -11,6 +11,14 @@ Blog.init({
     autoIncrement: true
   },
   author: DataTypes.TEXT,
+  year: {
+    type: DataTypes.INTEGER,
+    validate: {
+      isInt: true,
+      max: new Date().getFullYear(),
+      min: 1991
+    }
+  },
   url: {
     type: DataTypes.TEXT,
     allowNull: false

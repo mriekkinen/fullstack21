@@ -1,6 +1,6 @@
 const router = require('express').Router()
 
-const { tokenExtractor } = require('./util')
+const { tokenExtractor, sessionChecker } = require('./util')
 const { Blog, User, ReadingList } = require('../models')
 
 router.post('/', async (req, res) => {
@@ -19,16 +19,15 @@ router.post('/', async (req, res) => {
   res.json(entry)
 })
 
-router.put('/:id', tokenExtractor, async (req, res) => {
-  const user = await User.findByPk(req.decodedToken.id)
+router.put('/:id', tokenExtractor, sessionChecker, async (req, res) => {
   const blog = await Blog.findByPk(req.params.id)
-  if (!user || !blog) {
+  if (!blog) {
     return res.status(400).json({ error: 'Unknown blog' })
   }
 
   const entry = await ReadingList.findOne({
     where: {
-      userId: user.id,
+      userId: req.user.id,
       blogId: blog.id
     }
   })

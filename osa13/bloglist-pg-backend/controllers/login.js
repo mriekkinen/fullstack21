@@ -1,13 +1,13 @@
 /**
  * Login router
  * 
- * NOTE: THIS FILE HAS BEEN COPY-PASTED FROM THE COURSE MATERIAL!
+ * NOTE: MOST OF THIS FILE HAS BEEN COPY-PASTED FROM THE COURSE MATERIAL!
  */
 const jwt = require('jsonwebtoken')
 const router = require('express').Router()
 
 const { SECRET } = require('../util/config')
-const { User } = require('../models')
+const { User, Session } = require('../models')
 
 router.post('/', async (request, response) => {
   const body = request.body
@@ -26,12 +26,19 @@ router.post('/', async (request, response) => {
     })
   }
 
-  const userForToken = {
-    username: user.username,
-    id: user.id
+  if (user.disabled) {
+    return response.status(403).json({
+      error: 'Disabled user account'
+    })
   }
 
-  const token = jwt.sign(userForToken, SECRET)
+  const session = await Session.create({ userId: user.id })
+
+  const sessionForToken = {
+    sessionId: session.id
+  }
+
+  const token = jwt.sign(sessionForToken, SECRET)
 
   response
     .status(200)
